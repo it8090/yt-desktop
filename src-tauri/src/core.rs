@@ -168,12 +168,15 @@ impl Core {
             if item.id.is_empty() || item.id.len() > 512 || item.title.len() > 10_000 {
                 return Err(AppError::new("invalid_request", "Invalid video metadata"));
             }
+            // Skip/re-download is a queue policy, not a media identity option.
+            let mut identity_options = request.options.clone();
+            identity_options.skip_existing = true;
             let key = format!(
                 "{:x}",
                 Sha256::digest(serde_json::to_vec(&(
                     &item.site,
                     &item.id,
-                    &request.options,
+                    &identity_options,
                     &destination
                 ))?)
             );
@@ -856,6 +859,33 @@ mod tests {
         let c = Core::new(dir.path().into()).unwrap();
         assert_eq!(c.db.job(id).unwrap().status, "paused");
         assert!(c.completed_path(id).is_err());
+    }
+    #[test]
+    fn skip_policy_does_not_change_download_identity() {
+        let root = tempfile::tempdir().unwrap();
+        let c = Core::new(root.path().join("data")).unwrap();
+        let mut options = DownloadOptions {
+            skip_existing: false,
+            ..DownloadOptions::default()
+        };
+        let req = |options| EnqueueRequest {
+            items: vec![item()],
+            options,
+            destination: root.path().join("output").to_string_lossy().into(),
+            source_title: "Source".into(),
+        };
+        let first = c.enqueue(req(options.clone())).unwrap();
+        let file = root.path().join("existing.mp4");
+        std::fs::write(&file, b"fixture").unwrap();
+        c.update_job(&first.jobs[0].id, |j| {
+            j.status = "completed".into();
+            j.file_path = Some(file.to_string_lossy().into());
+        })
+        .unwrap();
+        options.skip_existing = true;
+        let next = c.enqueue(req(options)).unwrap();
+        assert_eq!(next.skipped, 1);
+        assert!(next.jobs.is_empty());
     }
     #[test]
     fn scheduler_can_start_from_a_native_ipc_thread() {
