@@ -40,6 +40,13 @@
 
 当前安装包没有配置商业代码签名或 Apple 公证。Windows / macOS 可能显示发布者提示；可以审查源码自行构建。其他 Linux 发行版可安装 Tauri 所需依赖后自行编译。Windows ARM64、Linux ARM64 尚未加入安装包构建矩阵；组件发布方缺少相应二进制时需手动提供系统组件。
 
+Linux AppImage 使用前需赋予执行权限；应用内自动安装更新适用于这种安装方式：
+
+```bash
+chmod +x YT-Desktop_0.1.0_linux-x86_64.AppImage
+./YT-Desktop_0.1.0_linux-x86_64.AppImage
+```
+
 首次启动后：
 
 1. 打开 **偏好设置 → 下载组件**，检查四个组件，点击“安装缺少的组件”。也可预先通过包管理器安装它们。
