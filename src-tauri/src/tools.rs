@@ -38,22 +38,21 @@ impl Tools {
             candidates.push(PathBuf::from(base).join(&executable));
         }
         candidates.into_iter().find(|p| {
-            if !p.is_file() {
-                return false;
-            }
             #[cfg(unix)]
             {
                 use std::os::unix::fs::PermissionsExt;
-                p.metadata()
-                    .map(|m| m.permissions().mode() & 0o111 != 0)
-                    .unwrap_or(false)
+                p.is_file()
+                    && p.metadata()
+                        .map(|m| m.permissions().mode() & 0o111 != 0)
+                        .unwrap_or(false)
             }
             #[cfg(not(unix))]
             {
-                true
+                p.is_file()
             }
         })
     }
+
     pub fn require(&self, name: &str) -> Result<PathBuf> {
         self.find(name)
             .ok_or_else(|| AppError::new("engine_missing", format!("Missing component: {name}")))

@@ -179,9 +179,15 @@ pub fn run() {
         ])
         .build(tauri::generate_context!())
         .expect("Failed to initialize YT-Desktop");
-    app.run(|app, event| {
-        if let tauri::RunEvent::Exit = event {
-            app.state::<Arc<Core>>().stop_all();
+    app.run(|app, event| match event {
+        tauri::RunEvent::Exit => app.state::<Arc<Core>>().stop_all(),
+        #[cfg(target_os = "macos")]
+        tauri::RunEvent::Reopen { .. } => {
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+                let _ = window.set_focus();
+            }
         }
+        _ => {}
     });
 }
