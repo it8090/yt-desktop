@@ -4,6 +4,12 @@
 
 [构建状态](https://github.com/it8090/yt-desktop/actions) · [版本下载](https://github.com/it8090/yt-desktop/releases) · [问题反馈](https://github.com/it8090/yt-desktop/issues)
 
+## 界面
+
+客户端使用与设计一致的列表、下载队列和右侧设置布局。以下为真实桌面客户端的英文登录连接页面：
+
+![英文登录连接界面](docs/screenshots/login-en.png)
+
 ## 功能
 
 - **地址解析**：单个视频、播放列表、频道、YouTube Shorts 列表；支持一次输入多个地址。
