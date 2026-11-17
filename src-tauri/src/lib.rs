@@ -12,8 +12,10 @@ use tauri::{Emitter, Manager, State};
 use tauri_plugin_opener::OpenerExt;
 
 #[tauri::command]
-async fn bootstrap(core: State<'_, Arc<Core>>) -> Result<Bootstrap> {
-    core.bootstrap().await
+async fn bootstrap(app: tauri::AppHandle, core: State<'_, Arc<Core>>) -> Result<Bootstrap> {
+    let mut data = core.bootstrap().await?;
+    data.version = app.package_info().version.to_string();
+    Ok(data)
 }
 #[tauri::command]
 fn save_settings(core: State<'_, Arc<Core>>, settings: Settings) -> Result<Settings> {

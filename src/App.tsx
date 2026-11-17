@@ -111,7 +111,9 @@ export default function App() {
             <SettingsIcon size={18} />
             <span>{t('settings')}</span>
           </button>
-          <div className="sidebar-foot">YT-Desktop 0.1.0 · {t('local')}</div>
+          <div className="sidebar-foot">
+            YT-Desktop {version} · {t('local')}
+          </div>
         </div>
       </aside>
       <div className="workspace">
