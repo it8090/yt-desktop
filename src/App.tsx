@@ -26,7 +26,7 @@ export default function App() {
   useEffect(() => {
     if (initialized) startupUpdateCheck(useStore.getState().settings.autoUpdate);
   }, [initialized]);
-  const { page, settings, auth, sources, sourceId, jobs, error, notice } = useStore();
+  const { version, page, settings, auth, sources, sourceId, jobs, error, notice } = useStore();
   useEffect(() => {
     if (native) void initialize();
   }, []);
