@@ -8,7 +8,7 @@
 
 客户端使用与设计一致的列表、下载队列和右侧设置布局。以下为真实桌面客户端的英文登录连接页面：
 
-![英文登录连接界面](docs/screenshots/login-en.png)
+![英文登录连接界面](docs/screenshots/login-en.jpg)
 
 ## 功能
 
@@ -141,6 +141,8 @@ cargo test --manifest-path src-tauri/Cargo.toml --lib
 ```bash
 python3 scripts/smoke.py
 ```
+
+完整发布与升级验收结果见 [0.1.0 验收记录](docs/0.1.0验收记录.md)。
 
 该测试现场生成带音频的视频，开启本地 HTTP 服务，执行真实列表解析、下载、暂停继续、ffprobe 校验、CSV 导出和重启记录恢复，不访问用户账号。测试素材和运行时数据不会提交到仓库。界面测试覆盖单行下载、跨可视区全选、搜索结果批量下载、未知大小进度显示和会话授权勾选。
 
